@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050914">
+<title>Distance Care Kit v2</title>
+<style>
+:root{
+  --bg:#050914; --bg2:#091426; --panel:#0f1c32; --panel2:#162944;
+  --gold:#f6cb70; --cream:#fff7e6; --muted:#a8b6cc; --pink:#ff9eb8;
+  --green:#80ddb2; --blue:#7fb3ff; --line:rgba(246,203,112,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; min-height:100vh; overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;
+  color:var(--cream);
+  background:
+    radial-gradient(circle at 18% -8%,rgba(246,203,112,.16),transparent 32%),
+    radial-gradient(circle at 98% 2%,rgba(255,158,184,.10),transparent 28%),
+    linear-gradient(180deg,#040813,#091426 47%,#040812 100%);
+}
+body:before{
+  content:""; position:fixed; inset:0; pointer-events:none; opacity:.15;
+  background-image:
+    radial-gradient(circle at 10% 18%,#fff 0 1px,transparent 1.3px),
+    radial-gradient(circle at 74% 10%,#fff 0 1px,transparent 1.3px),
+    radial-gradient(circle at 41% 36%,#fff 0 1px,transparent 1.3px),
+    radial-gradient(circle at 90% 61%,#fff 0 1px,transparent 1.3px);
+  background-size:210px 210px;
+}
+.boot{
+  position:fixed; inset:0; z-index:100; background:#030710;
+  display:flex; align-items:center; justify-content:center; padding:24px;
+  transition:.65s ease;
+}
+.boot.hide{opacity:0;visibility:hidden}
+.bootBox{width:min(620px,92vw);text-align:center}
+.bootLogo{font-size:2rem;margin-bottom:14px}
+.bootTitle{font-weight:900;letter-spacing:.18em;color:var(--gold);font-size:.85rem}
+.bootText{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#aef0cf;line-height:1.8;margin:20px 0;white-space:pre-line}
+.bootBar{height:13px;border-radius:999px;overflow:hidden;background:#0b1422;border:1px solid rgba(255,255,255,.08)}
+.bootBar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--pink));animation:boot 2.3s forwards}
+@keyframes boot{to{width:100%}}
+.enter{margin-top:18px;border:0;border-radius:999px;background:var(--gold);color:#111;padding:13px 20px;font-weight:900;cursor:pointer;opacity:0;animation:show 0s 2.35s forwards}
+@keyframes show{to{opacity:1}}
+.app{width:min(1100px,94vw);margin:auto;padding:18px 0 82px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.brand{color:var(--gold);font-size:.8rem;font-weight:900;letter-spacing:.17em}
+.status{font-size:.74rem;color:var(--green);padding:7px 10px;border-radius:999px;border:1px solid rgba(128,221,178,.28);background:rgba(128,221,178,.05)}
+.hero{position:relative;overflow:hidden;min-height:620px;border-radius:31px;border:1px solid var(--line);box-shadow:0 32px 100px rgba(0,0,0,.48)}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.40) saturate(.9)}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,7,16,.08),rgba(3,7,16,.28) 34%,rgba(3,7,16,.97) 100%)}
+.heroCopy{position:relative;z-index:2;min-height:620px;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(28px,6vw,68px)}
+.kicker{text-transform:uppercase;letter-spacing:.22em;color:var(--gold);font-size:.72rem;font-weight:800}
+h1{font-size:clamp(2.7rem,8vw,6.5rem);line-height:.86;margin:.55rem 0 1rem}
+.hero p{max-width:700px;color:#e4dfd5;line-height:1.68;font-size:clamp(1rem,2vw,1.16rem)}
+.made{color:var(--pink);font-weight:800;margin-top:10px}
+.os{margin-top:20px;padding:20px;border-radius:22px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(246,203,112,.10),rgba(127,179,255,.05))}
+.osTitle{color:var(--gold);font-weight:900;margin-bottom:10px}
+.moods{display:flex;gap:10px;flex-wrap:wrap}
+.mood{border:1px solid rgba(255,255,255,.12);background:#101d31;color:var(--cream);padding:11px 14px;border-radius:14px;cursor:pointer}
+.mood:hover{border-color:var(--gold)}
+.osResponse{margin-top:13px;color:#dae2ef;min-height:25px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.tile{border:1px solid var(--line);background:linear-gradient(180deg,var(--panel2),var(--panel));color:var(--cream);border-radius:22px;padding:20px;text-align:left;cursor:pointer;min-height:132px;box-shadow:0 14px 40px rgba(0,0,0,.26);transition:.22s}
+.tile:hover{transform:translateY(-4px);border-color:rgba(246,203,112,.72)}
+.tile .icon{font-size:1.85rem;display:block;margin-bottom:12px}
+.tile strong{display:block;font-size:1.03rem}
+.tile span{display:block;color:var(--muted);font-size:.84rem;line-height:1.43;margin-top:6px}
+.modalWrap{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.76);backdrop-filter:blur(9px);display:none;align-items:center;justify-content:center;padding:18px}
+.modalWrap.show{display:flex}
+.modal{width:min(790px,96vw);max-height:89vh;overflow:auto;border-radius:27px;border:1px solid var(--line);background:linear-gradient(180deg,#14243d,#091321);box-shadow:0 34px 110px rgba(0,0,0,.74);padding:clamp(22px,4vw,39px);position:relative}
+.close{position:sticky;top:0;float:right;border:1px solid rgba(255,255,255,.13);background:#08111e;color:var(--cream);padding:9px 13px;border-radius:999px;cursor:pointer;z-index:3}
+.modal h2{font-size:clamp(1.9rem,5vw,3.25rem);margin:8px 0}
+.sub{color:#d3dceb;line-height:1.7}
+.achievement{padding:16px 17px;margin:12px 0;border-radius:17px;background:#081526;border-left:4px solid var(--gold)}
+.achievement b{color:#ffe5a5}.achievement p{margin:7px 0 0;color:#d4ddec;line-height:1.53}
+.terminal{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#030710;border:1px solid rgba(128,221,178,.28);color:#acefce;padding:18px;border-radius:16px;line-height:1.8;white-space:pre-line}
+.big{font-size:clamp(1.8rem,6vw,3.55rem);font-weight:950;text-align:center;color:var(--gold);padding:24px 10px}
+.progress{height:16px;background:#07101c;border-radius:999px;overflow:hidden;border:1px solid rgba(255,255,255,.08);margin:18px 0}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--pink));animation:fill 2.2s forwards}
+@keyframes fill{to{width:86%}}
+.quote{font-size:1.35rem;line-height:1.55;text-align:center;padding:25px;border-radius:20px;background:rgba(246,203,112,.08);border:1px solid var(--line)}
+.missionList{display:grid;gap:10px;margin-top:16px}.mission{padding:13px 14px;border-radius:14px;background:#081526;color:#dce4f0}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.gallery img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:16px;border:1px solid var(--line)}
+.placeholder{display:flex;align-items:center;justify-content:center;text-align:center;min-height:150px;border-radius:16px;border:1px dashed rgba(246,203,112,.35);color:var(--muted);padding:15px;background:#081526}
+.audioCard{padding:16px;border-radius:16px;background:#081526;margin:12px 0}.audioCard b{color:#ffe5a5}.soon{display:inline-block;margin-top:9px;font-size:.76rem;border:1px solid rgba(255,255,255,.12);padding:7px 10px;border-radius:999px;color:var(--muted)}
+.secretStep{display:none;text-align:center;padding:28px 6px}.secretStep.active{display:block}
+.next{border:0;border-radius:999px;background:var(--gold);color:#111;font-weight:900;padding:13px 20px;cursor:pointer;margin-top:12px}
+.future{font-family:Georgia,serif;font-size:1.08rem;line-height:1.87;color:#e9e2d7;background:#081526;padding:23px;border-radius:18px;border-left:4px solid var(--gold)}
+.spotify{text-align:center;padding:25px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(128,221,178,.08),rgba(127,179,255,.06))}
+.spotify a{display:inline-block;margin-top:12px;text-decoration:none;background:#1ed760;color:#06110b;padding:12px 18px;border-radius:999px;font-weight:900}
+.footer{text-align:center;color:#8897ad;padding:30px 0 0}
+.bat{position:fixed;right:18px;bottom:18px;width:55px;height:55px;border-radius:50%;border:1px solid var(--line);background:#101d31;color:var(--gold);font-size:1.25rem;cursor:pointer;z-index:20}
+.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(15px);background:var(--cream);color:#111;padding:12px 16px;border-radius:999px;font-weight:800;opacity:0;transition:.25s;z-index:70;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.hero,.heroCopy{min-height:660px}.heroCopy{padding:28px 22px}.gallery{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="boot" id="boot">
+  <div class="bootBox">
+    <div class="bootLogo">🦇</div>
+    <div class="bootTitle">SARVESH OS</div>
+    <div class="bootText">INITIALISING...
+CONNECTING TO CHARU...
+IDENTITY FOUND: SARVESH
+STATUS: LOVED ❤️</div>
+    <div class="bootBar"><i></i></div>
+    <button class="enter" id="enter">Enter Distance Care Kit</button>
+  </div>
+</div>
+
+<div class="app">
+  <div class="top"><div class="brand">DISTANCE CARE KIT v2</div><div class="status">● SARVESH OS ONLINE</div></div>
+
+  <section class="hero">
+    <img src="sarvesh-art.png" alt="Sarvesh illustration">
+    <div class="heroCopy">
+      <div class="kicker">Long-distance support system</div>
+      <h1>Distance<br>Care Kit</h1>
+      <p>A small place for difficult days, lonely days, job-search days, and every day you need a reminder that somebody is firmly on your side.</p>
+      <div class="made">Built by Charu, only for Sarvesh ❤️</div>
+    </div>
+  </section>
+
+  <section class="os">
+    <div class="osTitle">SARVESH OS — How are you feeling right now?</div>
+    <div class="moods">
+      <button class="mood" data-msg="Good. Stay for a little happiness anyway 😊">😊 Good</button>
+      <button class="mood" data-msg="You do not have to explain everything. Breathe. I am here. 🤍">😐 Meh</button>
+      <button class="mood" data-msg="Today is allowed to feel heavy. You are still doing better than you think. 🫂">😔 Low</button>
+      <button class="mood" data-msg="Come here, baby. No fixing. No pressure. Just one very tight virtual hug. ❤️">😭 Very low</button>
+    </div>
+    <div class="osResponse" id="osResponse">Select a mood to begin.</div>
+  </section>
+
+  <section class="grid">
+    <button class="tile" data-modal="home"><span class="icon">🏠</span><strong>Home</strong><span>Your safe-place reminder.</span></button>
+    <button class="tile" data-modal="hug"><span class="icon">🫂</span><strong>Need a Hug</strong><span>Emergency long-distance comfort.</span></button>
+    <button class="tile" data-modal="laugh"><span class="icon">😂</span><strong>Make Me Laugh</strong><span>Scientifically questionable mood repair.</span></button>
+    <button class="tile" data-modal="job"><span class="icon">💼</span><strong>Job Motivation</strong><span>For waiting, rejection and self-doubt.</span></button>
+    <button class="tile" data-modal="achievements"><span class="icon">🏆</span><strong>Achievements</strong><span>Verified facts about the man you are.</span></button>
+    <button class="tile" data-modal="secret"><span class="icon">🎁</span><strong>Secret Files</strong><span>Confidential. Do not press.</span></button>
+    <button class="tile" data-modal="gallery"><span class="icon">📸</span><strong>Gallery</strong><span>Photos and memories for hard days.</span></button>
+    <button class="tile" data-modal="voice"><span class="icon">🎙️</span><strong>Voice Notes</strong><span>Optional — ready for you to add later.</span></button>
+    <button class="tile" data-modal="spotify"><span class="icon">🎵</span><strong>Spotify</strong><span>Your long-distance playlist corner.</span></button>
+    <button class="tile" data-modal="daily"><span class="icon">⭐</span><strong>Daily Mission</strong><span>Small wins. No pressure.</span></button>
+    <button class="tile" data-modal="quote"><span class="icon">📅</span><strong>Today's Quote</strong><span>One reminder for today.</span></button>
+    <button class="tile" data-modal="future"><span class="icon">📖</span><strong>Letter From Future Sarvesh</strong><span>Open when present-day Sarvesh feels tired.</span></button>
+  </section>
+
+  <div class="footer">Distance is temporary. Being on your side is permanent. ❤️</div>
+</div>
+
+<button class="bat">🦇</button>
+<div class="toast">Easter egg unlocked: one forehead kiss + 500 love points 💛</div>
+
+<div class="modalWrap" id="home"><div class="modal"><button class="close">Close ✕</button><div class="kicker">Welcome home</div><h2>Hi, handsome.</h2><p class="sub">You do not have to come here only when you are sad. Come here when you miss me, when you need a laugh, when work is exhausting, or when you want proof that your girlfriend is still obsessed with you.</p><div class="big">You are loved here. Always. ❤️</div></div></div>
+
+<div class="modalWrap" id="hug"><div class="modal"><button class="close">Close ✕</button><div class="kicker">Comfort delivery</div><h2>Need a Hug?</h2><div class="terminal">INITIALISING CHARU...
+██░░░░░░░░ 20%
+█████░░░░░ 50%
+████████░░ 80%
+██████████ 100%
+
+HUG DELIVERED ✓</div><p class="sub">Imagine me wrapping my arms around you, playing with your hair, holding your hand and kissing your forehead.</p><p class="sub">Nothing needs to be solved this second. You only need to breathe.</p><div class="big">You are going to be okay. ❤️</div></div></div>
+
+<div class="modalWrap" id="laugh"><div class="modal"><button class="close">Close ✕</button><div class="kicker">Emergency diagnostics</div><h2>Mood Scan</h2><div class="terminal">SEARCHING...
+CHECKING FACE...
+VERIFYING GIRLFRIEND RECORDS...
+CROSS-CHECKING HANDSOMENESS...
+
+RESULT:</div><div class="big">STILL EXTREMELY HANDSOME.</div><p class="sub" style="text-align:center">Your punishment is sending Charu one cute selfie immediately.</p></div></div>
+
+<div class="modalWrap" id="job"><div class="modal"><button class="close">Close ✕</button><div class="kicker">Current objective</div><h2>Get the Job You Deserve</h2><div class="progress"><i></i></div><p class="sub">I know the waiting is tiring. Rejections can make you question yourself, even when they say nothing truthful about your ability.</p><p class="sub">A hiring decision cannot measure your intelligence, character, potential, or the kind of person you are. Every application proves that you are still showing up.</p><p class="sub">Rest when you need to. Change your strategy when you need to. But please do not confuse a slow chapter with the end of your story.</p><div class="achievement"><b>🔒 Achievement loading: Dream Job</b><p>Status: coming closer with every attempt.</p></div><div class="big">I believe in you until you can believe in yourself again. 🤍</div></div></div>
+
+<div class="modalWrap" id="achievements"><div class="modal"><button class="close">Close ✕</button><div class="kicker">Verified Sarvesh facts</div><h2>Achievements Unlocked</h2>
+<div class="achievement"><b>🏆 Always Takes Care of Me</b><p>You always cook for me and care for me in the sweetest ways.</p></div>
+<div class="achievement"><b>🏆 Makes Me Smile</b><p>Even when I am angry, you still try your best to make me laugh.</p></div>
+<div class="achievement"><b>🏆 My Calm in the Chaos</b><p>You calm me down, help me understand things and make difficult moments easier.</p></div>
+<div class="achievement"><b>🏆 Happy-Go-Lucky Soul</b><p>Your positive energy brings lightness into my life.</p></div>
+<div class="achievement"><b>🏆 Calm and Patient</b><p>You are sorted, patient and understanding.</p></div>
+<div class="achievement"><b>🏆 Focused on His Goals</b><p>When you set your mind to something, you keep going until you achieve it.</p></div>
+<div class="achievement"><b>🏆 The One Who Completes Me</b><p>We are poles apart, but somehow whatever I am missing, you complete.</p></div>
+<div class="achievement"><b>🏆 Future Success Story</b><p>You will become successful without losing your humility, calmness or grounded nature.</p></div>
+<div class="achievement"><b>🏆 World's Best Boyfriend</b><p>You make me feel understood, cared for and safe.</p></div>
+<div class="big">MISSION COMPLETE ❤️</div></div></div>
+
+<div class="modalWrap" id="secret"><div class="modal"><button class="close">Close ✕</button>
+<div class="secretStep active"><div class="big">🚫 DO NOT PRESS.</div><button class="next">Press anyway</button></div>
+<div class="secretStep"><div class="big">Seriously?</div><button class="next">Yes</button></div>
+<div class="secretStep"><div class="big">Still here?</div><button class="next">Obviously</button></div>
+<div class="secretStep"><div class="big">Fine. You win.</div><button class="next">Continue</button></div>
+<div class="secretStep"><div class="big">Opening confidential file...</div><button class="next">Open</button></div>
+<div class="secretStep"><div class="big">I love you.<br><span style="font-size:.46em;color:var(--cream)">More than yesterday. Less than tomorrow. ❤️</span></div></div>
+</div></div>
+
+<div class="modalWrap" id="gallery"><div class="modal"><button class="close">Close ✕</button><div class="kicker">Memory archive</div><h2>Gallery</h2><p class="sub">This version is ready now. Later, you can replace the placeholders with your own photos.</p><div class="gallery"><img src="sarvesh-art.png" alt="Sarvesh art"><div class="placeholder">Favourite photo together</div><div class="placeholder">Funny call screenshot</div><div class="placeholder">A happy memory</div><div class="placeholder">Your favourite selfie</div><div class="placeholder">A future travel dream</div></div></div></div>
+
+<div class="modalWrap" id="voice"><div class="modal"><button class="close">Close ✕</button><div class="kicker">Charu audio system</div><h2>Voice Notes</h2><p class="sub">You do not need to record anything before sending this website. These are saved ideas for later.</p>
+<div class="audioCard"><b>🎙️ Open when you feel low</b><p class="sub">“Hi baby. I know today feels heavy, but I believe in you.”</p><span class="soon">COMING SOON</span></div>
+<div class="audioCard"><b>🎙️ Open before sleeping</b><p class="sub">“Goodnight. You did enough today. Rest properly.”</p><span class="soon">COMING SOON</span></div>
+<div class="audioCard"><b>🎙️ Open when you miss me</b><p class="sub">“Pretend I am sitting beside you and annoying you like usual.”</p><span class="soon">COMING SOON</span></div>
+</div></div>
+
+<div class="modalWrap" id="spotify"><div class="modal"><button class="close">Close ✕</button><div class="kicker">Music corner</div><h2>Our Playlist</h2><div class="spotify"><p class="sub">Create a playlist called <b>Whenever You Need Me ❤️</b> whenever you are ready.</p><a href="https://open.spotify.com" target="_blank" rel="noopener">Open Spotify</a></div></div></div>
+
+<div class="modalWrap" id="daily"><div class="modal"><button class="close">Close ✕</button><div class="kicker">Small wins only</div><h2>Today's Mission</h2><div class="missionList"><div class="mission">✓ Drink one full glass of water.</div><div class="mission">✓ Eat something proper.</div><div class="mission">✓ Apply for one job — one is enough.</div><div class="mission">✓ Take a break without feeling guilty.</div><div class="mission">✓ Send Charu one message or selfie.</div></div><div class="big">Reward: unlimited hugs and one very proud girlfriend. ❤️</div></div></div>
+
+<div class="modalWrap" id="quote"><div class="modal"><button class="close">Close ✕</button><div class="kicker">Today's reminder</div><h2>One Thought for Today</h2><div class="quote">“A slow season is still part of the journey. You are not behind. You are becoming.”</div><p class="sub" style="text-align:center;margin-top:16px">You do not need to solve your whole future today. Just take the next honest step.</p></div></div>
+
+<div class="modalWrap" id="future"><div class="modal"><button class="close">Close ✕</button><div class="kicker">Message received from the future</div><h2>Letter From Future Sarvesh</h2><div class="future">Hey.<br><br>I remember this version of us — the applications, the waiting, the stress, and the days you wondered whether anything was moving.<br><br>I am writing to tell you that it did move. You found your place. You became more capable, confident and certain of yourself than you can imagine right now.<br><br>The rejections were not proof that you were not good enough. They were simply doors that did not belong to you.<br><br>Please keep going. Rest when you need to, but do not give up on me. I exist because you kept trying.<br><br>And one more thing: Charu was right to believe in you.<br><br>— Future Sarvesh</div></div></div>
+
+<script>
+const boot=document.getElementById('boot');
+document.getElementById('enter').onclick=()=>boot.classList.add('hide');
+document.querySelectorAll('[data-modal]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.modal).classList.add('show'));
+document.querySelectorAll('.close').forEach(b=>b.onclick=()=>b.closest('.modalWrap').classList.remove('show'));
+document.querySelectorAll('.modalWrap').forEach(w=>w.onclick=e=>{if(e.target===w)w.classList.remove('show')});
+document.querySelectorAll('.mood').forEach(b=>b.onclick=()=>document.getElementById('osResponse').textContent=b.dataset.msg);
+const steps=[...document.querySelectorAll('.secretStep')];
+document.querySelectorAll('.next').forEach((b,i)=>b.onclick=()=>{steps[i].classList.remove('active');steps[i+1].classList.add('active')});
+const toast=document.querySelector('.toast');
+document.querySelector('.bat').onclick=()=>{toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2800)};
+</script>
+</body>
+</html>
